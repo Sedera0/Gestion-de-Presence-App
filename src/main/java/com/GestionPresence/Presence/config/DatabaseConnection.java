@@ -9,7 +9,12 @@ public class DatabaseConnection {
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "rafalimanana3$";
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la connexion à la base de données : " + e.getMessage());
+            throw new RuntimeException("Échec de la connexion à la base de données", e);
+        }
     }
 }
