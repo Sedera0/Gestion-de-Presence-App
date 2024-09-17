@@ -9,6 +9,7 @@ public class Student {
     private String email;
     private String phone;
     private Date birthday;
+    private String corNotification;
 
     // Getters and setters
     public String getStudentId() {
@@ -56,6 +57,14 @@ public class Student {
     }
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getCorNotification() {
+        return corNotification;
+    }
+
+    public void setCorNotification(String corNotification) {
+        this.corNotification = corNotification;
     }
 }
 

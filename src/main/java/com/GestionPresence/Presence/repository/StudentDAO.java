@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
-    private Connection connection;
+    private final Connection connection;
 
     public StudentDAO(Connection connection) {
         this.connection = connection;
@@ -83,5 +83,28 @@ public class StudentDAO {
             statement.setString(1, studentId);
             statement.executeUpdate();
         }
+    }
+
+    // Method to update the notification message
+    public void updateNotificationMessage(String studentId, String message) throws SQLException {
+        String query = "UPDATE student SET notification_message = ? WHERE student_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, message);
+            statement.setString(2, studentId);
+            statement.executeUpdate();
+        }
+    }
+
+    // Method to get the notification message
+    public String getNotificationMessage(String studentId) throws SQLException {
+        String query = "SELECT notification_message FROM student WHERE student_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, studentId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("notification_message");
+            }
+        }
+        return null;
     }
 }

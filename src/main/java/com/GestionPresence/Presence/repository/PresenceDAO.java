@@ -105,4 +105,29 @@ public class PresenceDAO {
             return presences;
         }
     }
+
+    public void updateNotificationMessage(String studentId, String message) throws SQLException {
+        String query = "UPDATE student SET cor_notification = ? WHERE student_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, message);
+            statement.setString(2, studentId);
+            statement.executeUpdate();
+        }
+    }
+
+    public int countUnjustifiedAbsences(String studentId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM presence WHERE student_id = ? AND justification IS NULL";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, studentId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+
+
 }
