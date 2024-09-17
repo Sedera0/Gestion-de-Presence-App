@@ -4,12 +4,11 @@ import java.util.Date;
 
 public class Presence {
     private int presenceId;
-    private String etudiantId;
-    private int coursId;
-    private Date datePresence;
-    private boolean estPresent;
+    private String studentId;
+    private int courseId;
+    private Date presenceDate;
+    private boolean isPresent;
 
-    // Getters and setters
     public int getPresenceId() {
         return presenceId;
     }
@@ -18,36 +17,36 @@ public class Presence {
         this.presenceId = presenceId;
     }
 
-    public String getEtudiantId() {
-        return etudiantId;
+    public String getStudentId() {
+        return studentId;
     }
 
-    public void setEtudiantId(String etudiantId) {
-        this.etudiantId = etudiantId;
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
-    public int getCoursId() {
-        return coursId;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCoursId(int coursId) {
-        this.coursId = coursId;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
-    public Date getDatePresence() {
-        return datePresence;
+    public Date getPresenceDate() {
+        return presenceDate;
     }
 
-    public void setDatePresence(Date datePresence) {
-        this.datePresence = datePresence;
+    public void setPresenceDate(Date presenceDate) {
+        this.presenceDate = presenceDate;
     }
 
-    public boolean isEstPresent() {
-        return estPresent;
+    public boolean isPresent() {
+        return isPresent;
     }
 
-    public void setEstPresent(boolean estPresent) {
-        this.estPresent = estPresent;
+    public void setPresent(boolean present) {
+        isPresent = present;
     }
 }
 

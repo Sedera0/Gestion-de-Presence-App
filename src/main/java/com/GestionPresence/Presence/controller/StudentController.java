@@ -1,7 +1,7 @@
 package com.GestionPresence.Presence.controller;
 
-import com.GestionPresence.Presence.entity.Etudiant;
-import com.GestionPresence.Presence.service.EtudiantService;
+import com.GestionPresence.Presence.entity.Student;
+import com.GestionPresence.Presence.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -9,40 +9,40 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
-public class EtudiantController {
+public class StudentController {
 
-    private final EtudiantService etudiantServiceService;
+    private final StudentService studentService;
 
-    public EtudiantController(EtudiantService etudiantServiceService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
     @PostMapping
-    public String addStudent(@RequestBody Etudiant etudiant) throws SQLException {
-        studentService.addEtudiant(etudiant);
-        return "Étudiant ajouté avec succès.";
+    public String addStudent(@RequestBody Student student) throws SQLException {
+        studentService.addStudent(student);
+        return "Student added successfully!";
     }
 
     @GetMapping("/{studentId}")
-    public Etudiant getStudent(@PathVariable String studentId) throws SQLException {
-        return studentService.getEtudiant(studentId);
+    public Student getStudent(@PathVariable String studentId) throws SQLException {
+        return studentService.getStudent(studentId);
     }
 
     @GetMapping
-    public List<Etudiant> getAllStudents() throws SQLException {
-        return studentService.getAllEtudiants();
+    public List<Student> getAllStudents() throws SQLException {
+        return studentService.getAllStudents();
     }
 
-    @PutMapping("/{etudiantId}")
-    public String updateStudent(@PathVariable String studentId, @RequestBody Etudiant etudiant) throws SQLException {
-        etudiant.setEtudiantId(studentId);
-        studentService.updateEtudiant(etudiant);
-        return "Étudiant mis à jour avec succès.";
+    @PutMapping("/{studentId}")
+    public String updateStudent(@PathVariable String studentId, @RequestBody Student student) throws SQLException {
+        student.setStudentId(studentId);
+        studentService.updateStudent(student);
+        return "Student updated successfully!";
     }
 
-    @DeleteMapping("/{etudiantId}")
-    public String deleteStudent(@PathVariable String etudiantId) throws SQLException {
-        studentService.deleteEtudiant(etudiantId);
-        return "Étudiant supprimé avec succès.";
+    @DeleteMapping("/{studentId}")
+    public String deleteStudent(@PathVariable String studentId) throws SQLException {
+        studentService.deleteStudent(studentId);
+        return "Student deleted successfully!";
     }
 }

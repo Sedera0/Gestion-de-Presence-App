@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class CorNotification {
     private int corNotificationId;
-    private String etudiantId;
-    private Date dateNotification;
-    private String raison;
+    private String studentId;
+    private Date notificationDate;
+    private String reason;
 
     // Getters and setters
     public int getCorNotificationId() {
@@ -17,28 +17,28 @@ public class CorNotification {
         this.corNotificationId = corNotificationId;
     }
 
-    public String getEtudiantId() {
-        return etudiantId;
+    public String getStudentId() {
+        return studentId;
     }
 
-    public void setEtudiantId(String etudiantId) {
-        this.etudiantId = etudiantId;
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
-    public Date getDateNotification() {
-        return dateNotification;
+    public Date getNotificationDate() {
+        return notificationDate;
     }
 
     public void setDateNotification(Date dateNotification) {
-        this.dateNotification = dateNotification;
+        this.notificationDate = notificationDate;
     }
 
-    public String getRaison() {
-        return raison;
+    public String getReason() {
+        return reason;
     }
 
-    public void setRaison(String raison) {
-        this.raison = raison;
+    public void setReason(String raison) {
+        this.reason = reason;
     }
 }
 

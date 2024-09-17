@@ -14,11 +14,11 @@ public class CorNotificationDAO {
     }
 
     public void addCorNotification(CorNotification corNotification) throws SQLException {
-        String query = "INSERT INTO cor_notification (etudiant_id, date_notification, raison) VALUES (?, ?, ?)";
+        String query = "INSERT INTO cor_notification (student_id, notification_date, reason) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, corNotification.getEtudiantId());
-            statement.setDate(2, new java.sql.Date(corNotification.getDateNotification().getTime()));
-            statement.setString(3, corNotification.getRaison());
+            statement.setString(1, corNotification.getStudentId());
+            statement.setDate(2, new java.sql.Date(corNotification.getNotificationDate().getTime()));
+            statement.setString(3, corNotification.getReason());
             statement.executeUpdate();
         }
     }
@@ -31,9 +31,9 @@ public class CorNotificationDAO {
             if (resultSet.next()) {
                 CorNotification corNotification = new CorNotification();
                 corNotification.setCorNotificationId(resultSet.getInt("cor_notification_id"));
-                corNotification.setEtudiantId(resultSet.getString("etudiant_id"));
-                corNotification.setDateNotification(resultSet.getDate("date_notification"));
-                corNotification.setRaison(resultSet.getString("raison"));
+                corNotification.setStudentId(resultSet.getString("student_id"));
+                corNotification.setDateNotification(resultSet.getDate("notification_date"));
+                corNotification.setReason(resultSet.getString("reason"));
                 return corNotification;
             }
         }
@@ -48,9 +48,9 @@ public class CorNotificationDAO {
             while (resultSet.next()) {
                 CorNotification corNotification = new CorNotification();
                 corNotification.setCorNotificationId(resultSet.getInt("cor_notification_id"));
-                corNotification.setEtudiantId(resultSet.getString("etudiant_id"));
-                corNotification.setDateNotification(resultSet.getDate("date_notification"));
-                corNotification.setRaison(resultSet.getString("raison"));
+                corNotification.setStudentId(resultSet.getString("student_id"));
+                corNotification.setDateNotification(resultSet.getDate("notification_date"));
+                corNotification.setReason(resultSet.getString("reason"));
                 notifications.add(corNotification);
             }
         }
@@ -58,11 +58,11 @@ public class CorNotificationDAO {
     }
 
     public void updateCorNotification(CorNotification corNotification) throws SQLException {
-        String query = "UPDATE cor_notification SET etudiant_id = ?, date_notification = ?, raison = ? WHERE cor_notification_id = ?";
+        String query = "UPDATE cor_notification SET student_id = ?, notification_date = ?, reason = ? WHERE cor_notification_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, corNotification.getEtudiantId());
-            statement.setDate(2, new java.sql.Date(corNotification.getDateNotification().getTime()));
-            statement.setString(3, corNotification.getRaison());
+            statement.setString(1, corNotification.getStudentId());
+            statement.setDate(2, new java.sql.Date(corNotification.getNotificationDate().getTime()));
+            statement.setString(3, corNotification.getReason());
             statement.setInt(4, corNotification.getCorNotificationId());
             statement.executeUpdate();
         }

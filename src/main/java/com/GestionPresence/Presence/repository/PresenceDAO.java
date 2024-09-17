@@ -13,12 +13,12 @@ public class PresenceDAO{
     }
 
     public void addPresence(Presence presence) throws SQLException {
-        String query = "INSERT INTO presence (etudiant_id, cours_id, date_presence, est_present) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO presence (student_id, course_id, presence_date, is_present) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, presence.getEtudiantId());
-            statement.setInt(2, presence.getCoursId());
-            statement.setDate(3, new java.sql.Date(presence.getDatePresence().getTime()));
-            statement.setBoolean(4, presence.isEstPresent());
+            statement.setString(1, presence.getStudentId());
+            statement.setInt(2, presence.getCourseId());
+            statement.setDate(3, new java.sql.Date(presence.getPresenceDate().getTime()));
+            statement.setBoolean(4, presence.isPresent());
             statement.executeUpdate();
         }
     }
@@ -31,10 +31,10 @@ public class PresenceDAO{
             if (resultSet.next()) {
                 Presence presence = new Presence();
                 presence.setPresenceId(resultSet.getInt("presence_id"));
-                presence.setEtudiantId(resultSet.getString("etudiant_id"));
-                presence.setCoursId(resultSet.getInt("cours_id"));
-                presence.setDatePresence(resultSet.getDate("date_presence"));
-                presence.setEstPresent(resultSet.getBoolean("est_present"));
+                presence.setStudentId(resultSet.getString("student_id"));
+                presence.setCourseId(resultSet.getInt("course_id"));
+                presence.setPresenceDate(resultSet.getDate("presence_date"));
+                presence.setPresent(resultSet.getBoolean("is_present"));
                 return presence;
             }
         }
@@ -49,10 +49,10 @@ public class PresenceDAO{
             while (resultSet.next()) {
                 Presence presence = new Presence();
                 presence.setPresenceId(resultSet.getInt("presence_id"));
-                presence.setEtudiantId(resultSet.getString("etudiant_id"));
-                presence.setCoursId(resultSet.getInt("cours_id"));
-                presence.setDatePresence(resultSet.getDate("date_presence"));
-                presence.setEstPresent(resultSet.getBoolean("est_present"));
+                presence.setStudentId(resultSet.getString("student_id"));
+                presence.setCourseId(resultSet.getInt("course_id"));
+                presence.setPresenceDate(resultSet.getDate("presence_date"));
+                presence.setPresent(resultSet.getBoolean("is_present"));
                 presences.add(presence);
             }
         }
@@ -60,12 +60,12 @@ public class PresenceDAO{
     }
 
     public void updatePresence(Presence presence) throws SQLException {
-        String query = "UPDATE presence SET etudiant_id = ?, cours_id = ?, date_presence = ?, est_present = ? WHERE presence_id = ?";
+        String query = "UPDATE presence SET student_id = ?, course_id = ?, date_presence = ?, est_present = ? WHERE presence_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, presence.getEtudiantId());
-            statement.setInt(2, presence.getCoursId());
-            statement.setDate(3, new java.sql.Date(presence.getDatePresence().getTime()));
-            statement.setBoolean(4, presence.isEstPresent());
+            statement.setString(1, presence.getStudentId());
+            statement.setInt(2, presence.getCourseId());
+            statement.setDate(3, new java.sql.Date(presence.getPresenceDate().getTime()));
+            statement.setBoolean(4, presence.isPresent());
             statement.setInt(5, presence.getPresenceId());
             statement.executeUpdate();
         }
