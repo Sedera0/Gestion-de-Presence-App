@@ -2,6 +2,8 @@ package com.GestionPresence.Presence.controller;
 
 import com.GestionPresence.Presence.entity.Group;
 import com.GestionPresence.Presence.service.GroupService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -18,31 +20,57 @@ public class GroupController {
     }
 
     @PostMapping
-    public String addGroup(@RequestBody Group group) throws SQLException {
-        groupService.addGroup(group);
-        return "Group added successfully!";
+    public ResponseEntity<String> addGroup(@RequestBody Group group) {
+        try {
+            groupService.addGroup(group);
+            return new ResponseEntity<>("Group added successfully!", HttpStatus.CREATED);
+        } catch (SQLException e) {
+            return new ResponseEntity<>("Failed to add group: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{groupId}")
-    public Group getGroup(@PathVariable int groupId) throws SQLException {
-        return groupService.getGroup(groupId);
+    public ResponseEntity<Group> getGroup(@PathVariable int groupId) {
+        try {
+            Group group = groupService.getGroup(groupId);
+            if (group != null) {
+                return new ResponseEntity<>(group, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (SQLException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping
-    public List<Group> getAllGroup() throws SQLException {
-        return groupService.getAllGroup();
+    public ResponseEntity<List<Group>> getAllGroup() {
+        try {
+            List<Group> groups = groupService.getAllGroup();
+            return new ResponseEntity<>(groups, HttpStatus.OK);
+        } catch (SQLException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{groupId}")
-    public String updateGroup(@PathVariable int groupId, @RequestBody Group group) throws SQLException {
-        group.setGroupId(groupId);
-        groupService.updateGroup(group);
-        return "Group updated successfully!";
+    public ResponseEntity<String> updateGroup(@PathVariable int groupId, @RequestBody Group group) {
+        try {
+            group.setGroupId(groupId);
+            groupService.updateGroup(group);
+            return new ResponseEntity<>("Group updated successfully!", HttpStatus.OK);
+        } catch (SQLException e) {
+            return new ResponseEntity<>("Failed to update group: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{groupId}")
-    public String deleteGroup(@PathVariable int groupId) throws SQLException {
-        groupService.deleteGroup(groupId);
-        return "Group deleted successfully!";
+    public ResponseEntity<String> deleteGroup(@PathVariable int groupId) {
+        try {
+            groupService.deleteGroup(groupId);
+            return new ResponseEntity<>("Group deleted successfully!", HttpStatus.NO_CONTENT);
+        } catch (SQLException e) {
+            return new ResponseEntity<>("Failed to delete group: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

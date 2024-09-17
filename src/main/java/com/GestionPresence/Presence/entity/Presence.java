@@ -7,7 +7,7 @@ public class Presence {
     private String studentId;
     private int courseId;
     private Date presenceDate;
-    private boolean isPresent;
+    private PresenceStatus status;
 
     public int getPresenceId() {
         return presenceId;
@@ -41,12 +41,12 @@ public class Presence {
         this.presenceDate = presenceDate;
     }
 
-    public boolean isPresent() {
-        return isPresent;
+    public PresenceStatus getStatus() {
+        return status;
     }
 
-    public void setPresent(boolean present) {
-        isPresent = present;
+    public void setStatus(PresenceStatus status) {
+        this.status = status;
     }
 }
 

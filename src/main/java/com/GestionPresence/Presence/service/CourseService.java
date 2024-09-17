@@ -14,11 +14,12 @@ public class CourseService {
         this.repository = new CourseDAO(connection);
     }
 
-    public void addCourse(Course course) throws SQLException {
+    public Course addCourse(Course course) throws SQLException {
         repository.addCourse(course);
+        return course;
     }
 
-    public Course getCourse(int courseId) throws SQLException {
+    public Course getCourseById(int courseId) throws SQLException {
         return repository.getCourse(courseId);
     }
 
@@ -26,11 +27,13 @@ public class CourseService {
         return repository.getAllCourses();
     }
 
-    public void updateCourse(Course course) throws SQLException {
+    public Course updateCourse(Course course) throws SQLException {
         repository.updateCourse(course);
+        return course;
     }
 
-    public void deleteCourse(int courseId) throws SQLException {
+    public boolean deleteCourse(int courseId) throws SQLException {
         repository.deleteCourse(courseId);
+        return false;
     }
 }
