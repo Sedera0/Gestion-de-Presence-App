@@ -1,21 +1,20 @@
 package com.GestionPresence.Presence.repository;
 
+import com.GestionPresence.Presence.config.DatabaseConnection;
 import com.GestionPresence.Presence.entity.Student;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class StudentDAO {
-    private final Connection connection;
-
-    public StudentDAO(Connection connection) {
-        this.connection = connection;
-    }
 
     public void addStudent(Student student) throws SQLException {
         String query = "INSERT INTO student (student_id, first_name, last_name, email, phone, birthday) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, student.getStudentId());
             statement.setString(2, student.getFirstName());
             statement.setString(3, student.getLastName());
@@ -28,7 +27,8 @@ public class StudentDAO {
 
     public Student getStudent(String studentId) throws SQLException {
         String query = "SELECT * FROM student WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, studentId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -48,7 +48,8 @@ public class StudentDAO {
     public List<Student> getAllStudents() throws SQLException {
         List<Student> students = new ArrayList<>();
         String query = "SELECT * FROM student";
-        try (Statement statement = connection.createStatement()) {
+        try (Connection connection = DatabaseConnection.getConnection();
+                Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 Student student = new Student();
@@ -66,7 +67,8 @@ public class StudentDAO {
 
     public void updateStudent(Student student) throws SQLException {
         String query = "UPDATE student SET first_name = ?, last_name = ?, email = ?, phone = ?, birthday = ? WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
             statement.setString(3, student.getEmail());
@@ -79,7 +81,8 @@ public class StudentDAO {
 
     public void deleteStudent(String studentId) throws SQLException {
         String query = "DELETE FROM student WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, studentId);
             statement.executeUpdate();
         }
@@ -88,7 +91,8 @@ public class StudentDAO {
     // Method to update the notification message
     public void updateNotificationMessage(String studentId, String message) throws SQLException {
         String query = "UPDATE student SET notification_message = ? WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, message);
             statement.setString(2, studentId);
             statement.executeUpdate();
@@ -98,7 +102,8 @@ public class StudentDAO {
     // Method to get the notification message
     public String getNotificationMessage(String studentId) throws SQLException {
         String query = "SELECT notification_message FROM student WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, studentId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {

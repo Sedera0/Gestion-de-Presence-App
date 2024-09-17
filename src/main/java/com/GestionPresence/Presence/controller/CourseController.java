@@ -26,6 +26,7 @@ public class CourseController {
             Course addedCourse = courseService.addCourse(course);
             return new ResponseEntity<>(addedCourse, HttpStatus.CREATED);
         } catch (SQLException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -37,6 +38,7 @@ public class CourseController {
             List<Course> courses = courseService.getAllCourses();
             return new ResponseEntity<>(courses, HttpStatus.OK);
         } catch (SQLException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -52,6 +54,7 @@ public class CourseController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,6 +63,7 @@ public class CourseController {
     @PutMapping("/{id}")
     public ResponseEntity<Course> updateCourse(@PathVariable("id") int id, @RequestBody Course course) {
         try {
+            course.setCourseId(id); // Set the ID of the course to be updated
             Course updatedCourse = courseService.updateCourse(course);
             if (updatedCourse != null) {
                 return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
@@ -67,6 +71,7 @@ public class CourseController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -82,6 +87,7 @@ public class CourseController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

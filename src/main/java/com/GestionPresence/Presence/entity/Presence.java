@@ -1,5 +1,6 @@
 package com.GestionPresence.Presence.entity;
 
+
 import java.util.Date;
 
 public class Presence {

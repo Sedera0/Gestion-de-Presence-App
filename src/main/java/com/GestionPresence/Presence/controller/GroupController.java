@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/group")
+@RequestMapping("/api/groups")
 public class GroupController {
 
     private final GroupService groupService;

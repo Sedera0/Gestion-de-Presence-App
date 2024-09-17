@@ -1,44 +1,39 @@
 package com.GestionPresence.Presence.service;
 
+import com.GestionPresence.Presence.config.DatabaseConnection;
 import com.GestionPresence.Presence.entity.Presence;
 import com.GestionPresence.Presence.entity.PresenceStatus;
 import com.GestionPresence.Presence.repository.PresenceDAO;
+import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
+
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class PresenceService {
+
     private final PresenceDAO repository;
 
-    public PresenceService(Connection connection) {
-        this.repository = new PresenceDAO(connection);
+    public PresenceService(PresenceDAO repository) {
+        this.repository = repository;
     }
 
-    // Méthode pour ajouter une nouvelle présence
-    public void addPresence(int studentId, PresenceStatus status) throws SQLException {
+    // Method to add a new presence
+    public void addPresence(String studentId, PresenceStatus status) throws SQLException {
         Presence presence = new Presence();
-        presence.setStudentId(String.valueOf(studentId));
+        presence.setStudentId(studentId);
         presence.setStatus(status);
-
-        // Sauvegarder la présence dans la base de données
         repository.addPresence(presence);
     }
 
-    // Méthode pour compter les absences non justifiées
-    public int countUnjustifiedAbsences(int studentId) throws SQLException {
-        List<Presence> presences = getAllPresencesByStudent(studentId);
-
-        // Compter les absences non justifiées
-        long unjustifiedAbsences = presences.stream()
-                .filter(presence -> presence.getStatus() == PresenceStatus.ABSENT)
-                .count();
-
-        return (int) unjustifiedAbsences;
+    public int countUnjustifiedAbsences(String studentId) throws SQLException {
+        return repository.countUnjustifiedAbsences(studentId);
     }
 
-    private List<Presence> getAllPresencesByStudent(int studentId) throws SQLException {
-        return repository.getAllPresencesByStudent(studentId);
+    // Changed method visibility to public
+    public List<Presence> getAllPresences(String studentId) throws SQLException {
+        return repository.getAllPresencesByStudent(studentId); // Directly use studentId if int
     }
 
     public Presence getPresence(int presenceId) throws SQLException {

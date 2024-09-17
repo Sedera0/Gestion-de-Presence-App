@@ -1,23 +1,22 @@
 package com.GestionPresence.Presence.repository;
 
+import com.GestionPresence.Presence.config.DatabaseConnection;
 import com.GestionPresence.Presence.entity.Presence;
 import com.GestionPresence.Presence.entity.PresenceStatus;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class PresenceDAO {
-    private Connection connection;
 
-    public PresenceDAO(Connection connection) {
-        this.connection = connection;
-    }
-
-    // Méthode pour ajouter une nouvelle présence
+    // Method to add a new presence
     public void addPresence(Presence presence) throws SQLException {
         String query = "INSERT INTO presence (student_id, course_id, presence_date, status) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, presence.getStudentId());
             statement.setInt(2, presence.getCourseId());
             statement.setDate(3, new java.sql.Date(presence.getPresenceDate().getTime()));
@@ -26,10 +25,11 @@ public class PresenceDAO {
         }
     }
 
-    // Méthode pour récupérer une présence par ID
+    // Method to retrieve a presence by ID
     public Presence getPresence(int presenceId) throws SQLException {
         String query = "SELECT * FROM presence WHERE presence_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, presenceId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -45,11 +45,12 @@ public class PresenceDAO {
         return null;
     }
 
-    // Méthode pour récupérer toutes les présences
+    // Method to retrieve all presences
     public List<Presence> getAllPresences() throws SQLException {
         List<Presence> presences = new ArrayList<>();
         String query = "SELECT * FROM presence";
-        try (Statement statement = connection.createStatement()) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 Presence presence = new Presence();
@@ -64,10 +65,11 @@ public class PresenceDAO {
         return presences;
     }
 
-    // Méthode pour mettre à jour une présence
+    // Method to update a presence
     public void updatePresence(Presence presence) throws SQLException {
         String query = "UPDATE presence SET student_id = ?, course_id = ?, presence_date = ?, status = ? WHERE presence_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, presence.getStudentId());
             statement.setInt(2, presence.getCourseId());
             statement.setDate(3, new java.sql.Date(presence.getPresenceDate().getTime()));
@@ -77,22 +79,24 @@ public class PresenceDAO {
         }
     }
 
-    // Méthode pour supprimer une présence
+    // Method to delete a presence
     public void deletePresence(int presenceId) throws SQLException {
         String query = "DELETE FROM presence WHERE presence_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, presenceId);
             statement.executeUpdate();
         }
     }
 
-    // Méthode pour récupérer toutes les présences d'un étudiant
-    public List<Presence> getAllPresencesByStudent(int studentId) throws SQLException {
+    // Method to retrieve all presences by student ID
+    public List<Presence> getAllPresencesByStudent(String studentId) throws SQLException {
+        List<Presence> presences = new ArrayList<>();
         String query = "SELECT * FROM presence WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, studentId);
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, studentId);
             ResultSet resultSet = statement.executeQuery();
-            List<Presence> presences = new ArrayList<>();
             while (resultSet.next()) {
                 Presence presence = new Presence();
                 presence.setPresenceId(resultSet.getInt("presence_id"));
@@ -102,22 +106,26 @@ public class PresenceDAO {
                 presence.setStatus(PresenceStatus.valueOf(resultSet.getString("status")));
                 presences.add(presence);
             }
-            return presences;
         }
+        return presences;
     }
 
+    // Method to update a notification message for a student
     public void updateNotificationMessage(String studentId, String message) throws SQLException {
         String query = "UPDATE student SET cor_notification = ? WHERE student_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, message);
             statement.setString(2, studentId);
             statement.executeUpdate();
         }
     }
 
+    // Method to count unjustified absences
     public int countUnjustifiedAbsences(String studentId) throws SQLException {
-        String query = "SELECT COUNT(*) FROM presence WHERE student_id = ? AND justification IS NULL";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        String query = "SELECT COUNT(*) FROM presence WHERE student_id = ? AND status = 'ABSENT'";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, studentId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -128,6 +136,4 @@ public class PresenceDAO {
             }
         }
     }
-
-
 }

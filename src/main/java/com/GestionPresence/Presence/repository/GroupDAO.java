@@ -1,21 +1,19 @@
 package com.GestionPresence.Presence.repository;
 
+import com.GestionPresence.Presence.config.DatabaseConnection;
 import com.GestionPresence.Presence.entity.Group;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class GroupDAO {
-    private Connection connection;
-
-    public GroupDAO(Connection connection) {
-        this.connection = connection;
-    }
-
     public void addGroup(Group group) throws SQLException {
         String query = "INSERT INTO group (group_name) VALUES (?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, group.getGroupName());
             statement.executeUpdate();
         }
@@ -23,7 +21,8 @@ public class GroupDAO {
 
     public Group getGroup(int groupId) throws SQLException {
         String query = "SELECT * FROM group WHERE group_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, groupId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -39,7 +38,8 @@ public class GroupDAO {
     public List<Group> getAllGroup() throws SQLException {
         List<Group> groups = new ArrayList<>();
         String query = "SELECT * FROM group";
-        try (Statement statement = connection.createStatement()) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 Group group = new Group();
@@ -53,7 +53,8 @@ public class GroupDAO {
 
     public void updateGroup(Group group) throws SQLException {
         String query = "UPDATE group SET group_name = ? WHERE group_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, group.getGroupName());
             statement.setInt(2, group.getGroupId());
             statement.executeUpdate();
@@ -62,7 +63,8 @@ public class GroupDAO {
 
     public void deleteGroup(int groupId) throws SQLException {
         String query = "DELETE FROM group WHERE group_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, groupId);
             statement.executeUpdate();
         }

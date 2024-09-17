@@ -2,16 +2,17 @@ package com.GestionPresence.Presence.service;
 
 import com.GestionPresence.Presence.entity.Course;
 import com.GestionPresence.Presence.repository.CourseDAO;
+import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class CourseService {
-    private CourseDAO repository;
+    private final CourseDAO repository;
 
-    public CourseService(Connection connection) {
-        this.repository = new CourseDAO(connection);
+    public CourseService(CourseDAO repository) {
+        this.repository = repository;
     }
 
     public Course addCourse(Course course) throws SQLException {
@@ -33,7 +34,6 @@ public class CourseService {
     }
 
     public boolean deleteCourse(int courseId) throws SQLException {
-        repository.deleteCourse(courseId);
-        return false;
+        return repository.deleteCourse(courseId);
     }
 }
