@@ -66,7 +66,7 @@ public class PresenceDAO {
     }
 
     // Method to update a presence
-    public void updatePresence(Presence presence) throws SQLException {
+    public boolean updatePresence(Presence presence) throws SQLException {
         String query = "UPDATE presence SET student_id = ?, course_id = ?, presence_date = ?, status = ? WHERE presence_id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -77,16 +77,18 @@ public class PresenceDAO {
             statement.setInt(5, presence.getPresenceId());
             statement.executeUpdate();
         }
+        return false;
     }
 
     // Method to delete a presence
-    public void deletePresence(int presenceId) throws SQLException {
+    public boolean deletePresence(int presenceId) throws SQLException {
         String query = "DELETE FROM presence WHERE presence_id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, presenceId);
             statement.executeUpdate();
         }
+        return false;
     }
 
     // Method to retrieve all presences by student ID
