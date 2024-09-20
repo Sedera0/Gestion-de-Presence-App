@@ -18,6 +18,7 @@ public class AbsenceNotificationService {
         return presenceDAO.getAbsencesCountByCourse(studentId);
     }
 
+
     public void checkAbsencesAndNotifyStudent(String studentId) throws SQLException {
         List<AbsenceCountByCourse> absencesByCourse = presenceDAO.getAbsencesCountByCourse(studentId);
 

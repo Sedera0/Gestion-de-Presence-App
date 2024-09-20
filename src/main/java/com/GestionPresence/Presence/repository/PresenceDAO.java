@@ -26,13 +26,26 @@ public class PresenceDAO {
     public void addPresence(Presence presence) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_PRESENCE_QUERY)) {
+            // Ajout de la nouvelle présence
             statement.setString(1, presence.getStudentId());
             statement.setInt(2, presence.getCourseId());
             statement.setDate(3, new java.sql.Date(presence.getPresenceDate().getTime()));
             statement.setString(4, presence.getStatus().name());
             statement.executeUpdate();
+
+            // Après l'ajout de la présence, on vérifie si l'étudiant a atteint 3 absences injustifiées
+            if (PresenceStatus.ABSENT.equals(presence.getStatus())) {
+                int unjustifiedAbsences = countUnjustifiedAbsences(presence.getStudentId());
+
+                // Si le nombre d'absences injustifiées est supérieur ou égal à 3, ajouter une notification
+                if (unjustifiedAbsences >= 3) {
+                    String message = "Vous avez " + unjustifiedAbsences + " absences injustifiées. Veuillez contacter l'administration.";
+                    updateNotificationMessage(presence.getStudentId(), message);
+                }
+            }
         }
     }
+
 
     public Presence getPresence(int presenceId) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
@@ -104,6 +117,7 @@ public class PresenceDAO {
         }
     }
 
+
     public int countUnjustifiedAbsences(String studentId) throws SQLException {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(COUNT_UNJUSTIFIED_ABSENCES_QUERY)) {
@@ -116,6 +130,7 @@ public class PresenceDAO {
         }
         return 0;
     }
+
 
     public List<AbsenceCountByCourse> getAbsencesCountByCourse(String studentId) throws SQLException {
         List<AbsenceCountByCourse> absencesCount = new ArrayList<>();

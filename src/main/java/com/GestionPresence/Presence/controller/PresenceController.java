@@ -22,16 +22,18 @@ public class PresenceController {
         this.presenceService = presenceService;
     }
 
-    // Ajouter une présence
     @PostMapping
-    public ResponseEntity<String> addPresence(
-            @RequestParam String studentId,
-            @RequestParam Integer courseId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date presenceDate,
-            @RequestParam PresenceStatus status) {
+    public ResponseEntity<String> addPresence(@RequestBody Presence presence) {
         try {
-            presenceService.addPresence(studentId, courseId, presenceDate, status);
-            int unjustifiedAbsences = presenceService.countUnjustifiedAbsences(studentId);
+            // Utilise les données de l'objet `presence` directement
+            presenceService.addPresence(
+                    presence.getStudentId(),
+                    presence.getCourseId(),
+                    presence.getPresenceDate(),
+                    presence.getStatus()
+            );
+
+            int unjustifiedAbsences = presenceService.countUnjustifiedAbsences(presence.getStudentId());
 
             if (unjustifiedAbsences >= 3) {
                 return ResponseEntity.status(HttpStatus.OK)
@@ -45,6 +47,7 @@ public class PresenceController {
                     .body("Erreur lors de l'ajout de la présence : " + e.getMessage());
         }
     }
+
 
 
     // Lire toutes les présences
