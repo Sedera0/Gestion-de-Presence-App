@@ -5,6 +5,7 @@ import com.GestionPresence.Presence.entity.AbsenceCountByCourse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class AbsenceNotificationService {
         }
 
         return "Aucune notification nécessaire."; // Message par défaut
+    }
+
+    public int countAbsencesByPeriod(String studentId, java.sql.Date startDate, Date endDate) throws SQLException {
+        return presenceDAO.countAbsencesByPeriod(studentId, startDate, endDate);
     }
 
 }

@@ -159,4 +159,22 @@ public class PresenceDAO {
         presence.setStatus(PresenceStatus.valueOf(resultSet.getString("status")));
         return presence;
     }
+
+    public int countAbsencesByPeriod(String studentId, Date startDate, Date endDate) throws SQLException {
+        String query = "SELECT COUNT(*) FROM presence WHERE student_id = ? AND presence_date BETWEEN ? AND ? AND status = 'ABSENT'";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, studentId);
+            statement.setDate(2, new java.sql.Date(startDate.getTime()));
+            statement.setDate(3, new java.sql.Date(endDate.getTime()));
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);  // Renvoie le nombre d'absences
+                }
+            }
+        }
+        return 0;  // Si aucune donnée n'est trouvée
+    }
+
 }

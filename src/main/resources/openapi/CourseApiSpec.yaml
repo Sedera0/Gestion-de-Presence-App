@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  title: Course API
+  description: API for managing courses.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /:
+    post:
+      summary: Create a new course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '201':
+          description: Course created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '500':
+          description: Internal server error
+    get:
+      summary: Get all courses
+      responses:
+        '200':
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+        '500':
+          description: Internal server error
+
+  /{id}:
+    get:
+      summary: Get a course by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the course
+      responses:
+        '200':
+          description: Course found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Course not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a course by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '200':
+          description: Course updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Course not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a course by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the course
+      responses:
+        '204':
+          description: Course deleted successfully
+        '404':
+          description: Course not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Course:
+      type: object
+      properties:
+        courseId:
+          type: integer
+          description: The unique ID of the course
+        courseName:
+          type: string
+          description: The name of the course
+      required:
+        - courseName

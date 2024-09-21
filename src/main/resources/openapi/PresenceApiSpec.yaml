@@ -1,0 +1,153 @@
+openapi: 3.0.1
+info:
+  title: Presence API
+  description: API for managing student presences.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/presences
+paths:
+  /:
+    post:
+      summary: Add a new presence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Presence'
+      responses:
+        '200':
+          description: Presence added successfully or notification sent
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Internal server error
+          content:
+            text/plain:
+              schema:
+                type: string
+    get:
+      summary: Get all presences
+      responses:
+        '200':
+          description: List of all presences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Presence'
+        '500':
+          description: Internal server error
+  /{id}:
+    get:
+      summary: Get presence by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Presence ID
+      responses:
+        '200':
+          description: Presence found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Presence'
+        '404':
+          description: Presence not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a presence by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Presence ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                studentId:
+                  type: string
+                  description: Student ID
+                courseId:
+                  type: integer
+                  description: Course ID
+                presenceDate:
+                  type: string
+                  format: date
+                  description: Date of presence
+                status:
+                  $ref: '#/components/schemas/PresenceStatus'
+      responses:
+        '200':
+          description: Presence updated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Presence not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a presence by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Presence ID
+      responses:
+        '200':
+          description: Presence deleted successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Presence not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Presence:
+      type: object
+      properties:
+        studentId:
+          type: string
+          description: Student ID
+        courseId:
+          type: integer
+          description: Course ID
+        presenceDate:
+          type: string
+          format: date
+          description: Date of presence
+        status:
+          $ref: '#/components/schemas/PresenceStatus'
+      required:
+        - studentId
+        - courseId
+        - presenceDate
+        - status
+    PresenceStatus:
+      type: string
+      enum:
+        - PRESENT
+        - ABSENT
+        - JUSTIFIED_ABSENCE
+      description: The status of the student's presence
