@@ -19,16 +19,17 @@ public class AbsenceNotificationService {
     }
 
 
-    public void checkAbsencesAndNotifyStudent(String studentId) throws SQLException {
+    public String checkAbsencesAndNotifyStudent(String studentId) throws SQLException {
         List<AbsenceCountByCourse> absencesByCourse = presenceDAO.getAbsencesCountByCourse(studentId);
-
-        // Calculer le total des absences
         int totalAbsences = absencesByCourse.stream().mapToInt(AbsenceCountByCourse::getAbsenceCount).sum();
 
-        // Si le total est supérieur ou égal à 3, envoyer une notification
         if (totalAbsences >= 3) {
             String message = "Vous avez un total de " + totalAbsences + " absences injustifiées. Veuillez régulariser votre situation.";
             presenceDAO.updateNotificationMessage(studentId, message);
+            return message; // Retourne le message
         }
+
+        return "Aucune notification nécessaire."; // Message par défaut
     }
+
 }

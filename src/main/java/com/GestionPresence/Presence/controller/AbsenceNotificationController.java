@@ -30,18 +30,18 @@ public class AbsenceNotificationController {
         }
     }
 
-
     @GetMapping("/notify/{studentId}")
     public ResponseEntity<String> checkAndNotify(@PathVariable("studentId") String studentId) {
         if (studentId == null || studentId.trim().isEmpty()) {
             return new ResponseEntity<>("Invalid student ID.", HttpStatus.BAD_REQUEST);
         }
         try {
-            absenceNotificationService.checkAbsencesAndNotifyStudent(studentId);
-            return new ResponseEntity<>("Absences checked and notification sent if necessary.", HttpStatus.OK);
+            String notificationMessage = absenceNotificationService.checkAbsencesAndNotifyStudent(studentId);
+            return new ResponseEntity<>(notificationMessage, HttpStatus.OK); // Renvoie le message de notification
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Error occurred while checking absences: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

@@ -30,10 +30,10 @@ public class PresenceDAO {
             statement.setString(1, presence.getStudentId());
             statement.setInt(2, presence.getCourseId());
             statement.setDate(3, new java.sql.Date(presence.getPresenceDate().getTime()));
-            statement.setString(4, presence.getStatus().name());
+            statement.setString(4, presence.getStatus().name()); // Assurez-vous que cela correspond à ce que la DB attend
             statement.executeUpdate();
 
-            // Après l'ajout de la présence, on vérifie si l'étudiant a atteint 3 absences injustifiées
+            // Vérification si l'absence est injustifiée
             if (PresenceStatus.ABSENT.equals(presence.getStatus())) {
                 int unjustifiedAbsences = countUnjustifiedAbsences(presence.getStudentId());
 
@@ -45,6 +45,7 @@ public class PresenceDAO {
             }
         }
     }
+
 
 
     public Presence getPresence(int presenceId) throws SQLException {

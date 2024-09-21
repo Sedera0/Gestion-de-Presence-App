@@ -63,4 +63,7 @@ public class PresenceService {
         presence.setStatus(status);
         return repository.updatePresence(presence);
     }
+
+
+
 }
