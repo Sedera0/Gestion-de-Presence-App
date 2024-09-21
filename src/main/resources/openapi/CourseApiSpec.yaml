@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:8080/api
 paths:
-  /:
+  /courses:
     post:
       summary: Create a new course
       requestBody:
@@ -38,7 +38,7 @@ paths:
         '500':
           description: Internal server error
 
-  /{id}:
+  /courses/{id}:
     get:
       summary: Get a course by ID
       parameters:
