@@ -25,7 +25,6 @@ public class PresenceController {
     @PostMapping
     public ResponseEntity<String> addPresence(@RequestBody Presence presence) {
         try {
-            // Utilise les données de l'objet `presence` directement
             presenceService.addPresence(
                     presence.getStudentId(),
                     presence.getCourseId(),

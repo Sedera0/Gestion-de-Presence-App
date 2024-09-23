@@ -27,10 +27,10 @@ public class AbsenceNotificationService {
         if (totalAbsences >= 3) {
             String message = "Vous avez un total de " + totalAbsences + " absences injustifiées. Veuillez régulariser votre situation.";
             presenceDAO.updateNotificationMessage(studentId, message);
-            return message; // Retourne le message
+            return message;
         }
 
-        return "Aucune notification nécessaire."; // Message par défaut
+        return "Aucune notification nécessaire.";
     }
 
     public int countAbsencesByPeriod(String studentId, java.sql.Date startDate, Date endDate) throws SQLException {

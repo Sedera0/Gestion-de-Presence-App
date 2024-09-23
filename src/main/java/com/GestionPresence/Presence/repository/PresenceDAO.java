@@ -170,11 +170,11 @@ public class PresenceDAO {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getInt(1);  // Renvoie le nombre d'absences
+                    return resultSet.getInt(1);
                 }
             }
         }
-        return 0;  // Si aucune donnée n'est trouvée
+        return 0;
     }
 
 }
